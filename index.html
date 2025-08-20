@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coderush Countdown</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-image: url('./5674805fe00ff457e0da21a7ab4ce2b9.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+    }
+
+    /* Avengers logo floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.15; }
+      50% { transform: translateY(-20px) rotate(10deg); opacity: 0.25; }
+    }
+    .floating-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 400px;
+      height: 400px;
+      transform: translate(-50%, -50%);
+      animation: float 6s ease-in-out infinite;
+      z-index: 0;
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* Snap shake effect for numbers */
+    @keyframes snapShake {
+      0% { transform: scale(1); }
+      25% { transform: scale(1.05) rotate(-2deg); }
+      50% { transform: scale(0.95) rotate(2deg); }
+      75% { transform: scale(1.02) rotate(-1deg); }
+      100% { transform: scale(1); }
+    }
+    .snap {
+      animation: snapShake 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-gray-900/70 backdrop-blur-sm text-white flex items-center justify-center min-h-screen relative">
+
+   
+
+    <div class="text-center p-10 z-10">
+      <!-- Title Image -->
+      <img src="./Screenshot_2025-08-21_at_12.40.17_AM-removebg-preview.png" 
+           alt="Coderush Title" 
+           class="mx-auto mb-12 h-40 md:h-56 lg:h-72">
+
+      <!-- Timer -->
+      <div id="timer-container">
+        <p class="text-3xl md:text-5xl lg:text-6xl text-gray-200 mb-12 font-bold"> Hackathon ends in</p>
+        <div class="flex justify-center space-x-8 md:space-x-14 lg:space-x-20">
+          <!-- Days -->
+          <div class="flex flex-col items-center">
+            <span id="days" class="text-8xl md:text-[9rem] lg:text-[11rem] font-black">00</span>
+            <span class="text-2xl md:text-3xl lg:text-4xl text-gray-400 mt-4">Days</span>
+          </div>
+          <!-- Hours -->
+          <div class="flex flex-col items-center">
+            <span id="hours" class="text-8xl md:text-[9rem] lg:text-[11rem] font-black">00</span>
+            <span class="text-2xl md:text-3xl lg:text-4xl text-gray-400 mt-4">Hours</span>
+          </div>
+          <!-- Minutes -->
+          <div class="flex flex-col items-center">
+            <span id="minutes" class="text-8xl md:text-[9rem] lg:text-[11rem] font-black">00</span>
+            <span class="text-2xl md:text-3xl lg:text-4xl text-gray-400 mt-4">Minutes</span>
+          </div>
+          <!-- Seconds -->
+          <div class="flex flex-col items-center">
+            <span id="seconds" class="text-8xl md:text-[9rem] lg:text-[11rem] font-black">00</span>
+            <span class="text-2xl md:text-3xl lg:text-4xl text-gray-400 mt-4">Seconds</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- End Message -->
+      <div id="end-message" class="hidden">
+        <h2 class="text-7xl md:text-9xl lg:text-[10rem] font-extrabold text-red-500 drop-shadow-lg">
+          ⚡ Hackathon Over ⚡
+        </h2>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const countdownDate = new Date('August 23, 2025 09:00:00').getTime();
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+    const timerContainer = document.getElementById('timer-container');
+    const endMessage = document.getElementById('end-message');
+
+    const addSnapEffect = (el) => {
+      el.classList.add("snap");
+      setTimeout(() => el.classList.remove("snap"), 500);
+    };
+
+    const countdownInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = countdownDate - now;
+
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        timerContainer.classList.add('hidden');
+        endMessage.classList.remove('hidden');
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      const formatTime = (time) => (time < 10 ? `0${time}` : time);
+
+      if (daysEl.innerHTML !== formatTime(days)) addSnapEffect(daysEl);
+      if (hoursEl.innerHTML !== formatTime(hours)) addSnapEffect(hoursEl);
+      if (minutesEl.innerHTML !== formatTime(minutes)) addSnapEffect(minutesEl);
+      if (secondsEl.innerHTML !== formatTime(seconds)) addSnapEffect(secondsEl);
+
+      daysEl.innerHTML = formatTime(days);
+      hoursEl.innerHTML = formatTime(hours);
+      minutesEl.innerHTML = formatTime(minutes);
+      secondsEl.innerHTML = formatTime(seconds);
+    }, 1000);
+  </script>
+</body>
+</html>
